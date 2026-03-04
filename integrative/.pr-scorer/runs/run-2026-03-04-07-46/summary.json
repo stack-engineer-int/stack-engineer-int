@@ -1,0 +1,94 @@
+{
+	"runName": "run-2026-03-04-07-46",
+	"timestamp": "2026-03-04T07:46:21.028Z",
+	"totalTests": 31,
+	"passed": 30,
+	"failed": 1,
+	"passRate": 97,
+	"byCategory": {
+		"trivial": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"bugfix": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"feature": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"auth": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"api": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"database": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"security": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"performance": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"tests": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"ci": {
+			"total": 2,
+			"passed": 1,
+			"passRate": 50
+		},
+		"deps": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"infra": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		}
+	},
+	"byScore": {
+		"1": {
+			"total": 4,
+			"passed": 4,
+			"passRate": 100
+		},
+		"2": {
+			"total": 7,
+			"passed": 7,
+			"passRate": 100
+		},
+		"3": {
+			"total": 13,
+			"passed": 12,
+			"passRate": 92
+		},
+		"5": {
+			"total": 7,
+			"passed": 7,
+			"passRate": 100
+		}
+	},
+	"avgDurationMs": 5690,
+	"gaps": []
+}

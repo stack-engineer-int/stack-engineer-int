@@ -41,7 +41,7 @@ pnpm dev eval --category security,auth --score 5,8
 pnpm dev eval --report
 ```
 
-Runs 31 fixtures across 12 categories (trivial, bugfix, feature, auth, api, database, security, performance, tests, ci, deps, infra). Use `--report` to save a detailed markdown report to `.pr-scorer/runs/`.
+Runs 31 fixtures across 12 categories (trivial, bugfix, feature, auth, api, database, security, performance, tests, ci, deps, infra). Use `--report` to save results and a Sonnet-generated SWOT analysis to `.pr-scorer/runs/`.
 
 ### Record a score override
 
@@ -69,10 +69,30 @@ Analyzes recorded overrides using LLM gap analysis. Groups similar suggestions i
 | 5 | High | Security fix, major feature, breaking change |
 | 8 | Critical | Architecture overhaul, data migration, auth system |
 
+## Eval Results
+
+Eval pass rate across prompt iterations, tested against 31 synthetic fixtures:
+
+| Run | Model | Pass Rate | Changes |
+|-----|-------|-----------|---------|
+| Baseline | Haiku 4.5 | 77% (24/31) | Initial prompt |
+| Model switch | Gemini 3 Flash | 87% (27/31) | Switched to gemini-3-flash-preview |
+| Prompt v1 | Gemini 3 Flash | 90% (28/31) | Added CI, security patch, deps guidance |
+| Prompt v2 | Gemini 3 Flash | 97% (30/31) | Added data migration, infra scope, UI state guidance |
+
+Full run data (summary, per-fixture JSONL, SWOT analysis) is in `.pr-scorer/runs/`.
+
+### On overfitting
+
+These numbers are intentionally overfit on the eval fixtures. The goal of prompt engineering is to maximize alignment against a known set of calibration examples, similar to RLHF (reinforcement learning from human feedback) but without adjusting model weights. You push the prompt until the model's scoring roughly matches what a human reviewer would assign.
+
+Real results will vary. Every codebase has different conventions, PR patterns, and impact thresholds. The scoring prompt (`src/scoring/prompt.ts`) should be tailored to the specifics of the team and application implementing it. The eval-override-gaps loop exists for exactly this: run evals, record disagreements, analyze patterns, refine the prompt, repeat.
+
 ## Models
 
 - **Claude Haiku 4.5** (`haiku`) - Default for single PR scoring. Fast, high quality.
-- **Gemini 2.0 Flash** (`gemini-flash`) - Default for batch operations. 6x cheaper.
+- **Gemini 3 Flash** (`gemini-flash`) - Default for batch operations and evals. Cost-effective.
+- **Claude Sonnet 4.6** (`sonnet`) - Used for SWOT analysis of eval results. High-quality reasoning.
 
 ## Architecture
 
@@ -89,7 +109,7 @@ src/
   scoring/
     schema.ts         # Zod schema for impact scores
     prompt.ts         # Scoring prompt with calibration
-    models.ts         # Model registry (Haiku, Gemini Flash)
+    models.ts         # Model registry (Haiku, Gemini Flash, Sonnet)
     scorer.ts         # Core scoring function
   diff/
     filter.ts         # Remove lockfiles, build output
@@ -99,7 +119,8 @@ src/
   evals/
     types.ts          # Fixture and result types
     runner.ts         # Concurrent fixture runner
-    report.ts         # Report generation and gap detection
+    report.ts         # JSONL report generation and gap detection
+    analysis.ts       # Sonnet-powered SWOT analysis
     fixtures/         # 31 test fixtures across 12 categories
   feedback/
     overrides.ts      # Override persistence (JSON files)

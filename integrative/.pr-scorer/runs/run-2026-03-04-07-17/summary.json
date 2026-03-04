@@ -1,0 +1,109 @@
+{
+	"runName": "run-2026-03-04-07-17",
+	"timestamp": "2026-03-04T07:17:59.633Z",
+	"totalTests": 31,
+	"passed": 24,
+	"failed": 7,
+	"passRate": 77,
+	"byCategory": {
+		"trivial": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"bugfix": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"feature": {
+			"total": 2,
+			"passed": 1,
+			"passRate": 50
+		},
+		"auth": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"api": {
+			"total": 3,
+			"passed": 2,
+			"passRate": 67
+		},
+		"database": {
+			"total": 3,
+			"passed": 2,
+			"passRate": 67
+		},
+		"security": {
+			"total": 3,
+			"passed": 2,
+			"passRate": 67
+		},
+		"performance": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"tests": {
+			"total": 2,
+			"passed": 2,
+			"passRate": 100
+		},
+		"ci": {
+			"total": 2,
+			"passed": 0,
+			"passRate": 0
+		},
+		"deps": {
+			"total": 3,
+			"passed": 3,
+			"passRate": 100
+		},
+		"infra": {
+			"total": 3,
+			"passed": 2,
+			"passRate": 67
+		}
+	},
+	"byScore": {
+		"1": {
+			"total": 4,
+			"passed": 4,
+			"passRate": 100
+		},
+		"2": {
+			"total": 7,
+			"passed": 5,
+			"passRate": 71
+		},
+		"3": {
+			"total": 13,
+			"passed": 9,
+			"passRate": 69
+		},
+		"5": {
+			"total": 7,
+			"passed": 6,
+			"passRate": 86
+		}
+	},
+	"avgDurationMs": 3435,
+	"gaps": [
+		{
+			"pattern": "Consistent under-scoring",
+			"occurrences": 6,
+			"affectedTests": [
+				"feature-dark-mode",
+				"api-new-endpoint",
+				"db-migration-data",
+				"ci-add-workflow",
+				"ci-add-deployment",
+				"infra-docker"
+			],
+			"suggestedFix": "Review scoring prompt to better recognize impact. Model may be missing architectural significance.",
+			"priority": "high"
+		}
+	]
+}
