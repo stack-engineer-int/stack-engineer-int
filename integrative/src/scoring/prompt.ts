@@ -10,10 +10,16 @@ export const SCORING_PROMPT = `Analyze this pull request and score its impact us
 
 Scoring guidance:
 - SQL injection / auth bypass = 5 (Major) - data breach potential
+- New deployment infrastructure (Kubernetes manifests, Terraform, Docker Compose for prod) = 5 (Major) - defines how the system runs in production, equivalent to a new system
 - Memory leak / race condition = 3 (Moderate) - stability impact, hard to diagnose
 - XSS fix = 3 (Moderate) - client-side only, no data breach
+- "New integration" at score 3 means a new external service, API, or architectural pattern, not adding an npm package
+- Adding a CI/CD workflow (new capability, affects all future code) = 2 (Minor)
+- Dependency version bump that patches a security CVE = 2 (Minor) - the fix is upstream, this PR just updates a version number
+- Adding a small utility/validation library with minimal integration = 2 (Minor)
 - Adding tests = 2 (Minor) - coverage value without changing production code
 - Minor dep bumps = 1 (Trivial) unless breaking
+- Tweaking an existing CI config (timeout, env var) = 1 (Trivial)
 
 Confidence guidance:
 - High confidence (0.8-1.0): Clear-cut changes with obvious impact level

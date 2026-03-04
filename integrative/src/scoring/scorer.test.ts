@@ -58,7 +58,7 @@ describe('scorePR', () => {
     expect(mockTruncateDiff).not.toHaveBeenCalled();
   });
 
-  it('defaults to haiku model', async () => {
+  it('uses temperature 0', async () => {
     await scorePR(context);
 
     const call = mockGenerateText.mock.calls[0][0];
@@ -76,10 +76,12 @@ describe('scorePR', () => {
     await expect(scorePR(context)).rejects.toThrow('No output from model');
   });
 
-  it('passes model option through to getModel', async () => {
+  it('uses specified model when provided', async () => {
     await scorePR(context, { model: 'gemini-flash' });
 
-    // Verify generateText was called (model selection is internal)
-    expect(mockGenerateText).toHaveBeenCalledTimes(1);
+    const call = mockGenerateText.mock.calls[0][0];
+    // model is a provider instance, verify it was passed through
+    expect(call.model).toBeDefined();
+    expect(call.temperature).toBe(0);
   });
 });

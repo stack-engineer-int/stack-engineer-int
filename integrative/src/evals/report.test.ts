@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { generateReport, formatReportJsonl } from './report.js';
-import type { FixtureResult } from './types.js';
+import type { FixtureCategory, FixtureResult } from './types.js';
 
 function makeResult(overrides: {
   fixtureId: string;
-  category: string;
+  category: FixtureCategory;
   expectedScore: number;
   actualScore: number;
   durationMs?: number;
@@ -14,7 +14,7 @@ function makeResult(overrides: {
     fixture: {
       id: overrides.fixtureId,
       name: overrides.fixtureId,
-      category: overrides.category as FixtureResult['fixture']['category'],
+      category: overrides.category,
       expectedScore: overrides.expectedScore as 1 | 2 | 3 | 5 | 8,
       pr: { title: 'test', body: null, author: 'dev' },
       files: [],

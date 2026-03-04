@@ -24,9 +24,7 @@ function overridePath(prRef: string): string {
 }
 
 export function saveOverride(override: ScoreOverride): void {
-  if (!existsSync(OVERRIDES_DIR)) {
-    mkdirSync(OVERRIDES_DIR, { recursive: true });
-  }
+  mkdirSync(OVERRIDES_DIR, { recursive: true });
   writeFileSync(overridePath(override.pr), JSON.stringify(override, null, 2));
 }
 

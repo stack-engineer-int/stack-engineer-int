@@ -53,11 +53,13 @@ export async function evalCommand(options: {
     const runName = `run-${new Date().toISOString().slice(0, 16).replace(/[T:]/g, '-')}`;
     const report = generateReport(runName, results);
     const { runDir } = saveReport(report);
+    console.log(chalk.dim(`Results saved to ${runDir}/`));
 
+    console.log('');
     console.log(chalk.dim('Generating SWOT analysis with Sonnet...'));
     const analysis = await generateAnalysis(report, SCORING_PROMPT);
-    writeFileSync(join(runDir, 'analysis.md'), analysis + '\n');
-
-    console.log(chalk.dim(`Report saved to ${runDir}/`));
+    const analysisPath = join(runDir, 'analysis.md');
+    writeFileSync(analysisPath, analysis + '\n');
+    console.log(`${chalk.bold('Analysis:')} ${analysisPath}`);
   }
 }

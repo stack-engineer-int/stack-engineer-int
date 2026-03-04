@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { FixtureResult } from './types.js';
 
@@ -138,9 +138,7 @@ export function saveReport(report: RunReport): { runDir: string; files: string[]
   const baseDir = join(process.cwd(), '.pr-scorer', 'runs');
   const runDir = join(baseDir, report.runName);
 
-  if (!existsSync(runDir)) {
-    mkdirSync(runDir, { recursive: true });
-  }
+  mkdirSync(runDir, { recursive: true });
 
   const files: string[] = [];
 
@@ -150,8 +148,7 @@ export function saveReport(report: RunReport): { runDir: string; files: string[]
   files.push(summaryPath);
 
   const reportPath = join(runDir, 'results.jsonl');
-  const header = '# JSONL: one result per line, compact structured output with LOC and file count per fixture';
-  writeFileSync(reportPath, header + '\n' + formatReportJsonl(report) + '\n');
+  writeFileSync(reportPath, formatReportJsonl(report) + '\n');
   files.push(reportPath);
 
   return { runDir, files };
