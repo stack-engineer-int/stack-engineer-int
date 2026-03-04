@@ -1,6 +1,6 @@
 # PR Scorer
 
-LLM-powered PR impact scoring with evaluation framework. Extracted from [Cohesion](https://github.com/stack-engineer-int/cohesion) as a standalone CLI tool.
+LLM-powered PR impact scoring with evaluation framework. Calibrate a Fibonacci scale (1, 2, 3, 5, 8) to your team's judgment of PR impact. Use it to measure changes in engineering velocity and quality over time, especially as you introduce new tools and processes.
 
 ## Setup
 
@@ -61,24 +61,24 @@ Analyzes recorded overrides using LLM gap analysis. Groups similar suggestions i
 
 ## Scoring Scale
 
-| Score | Impact | Example |
-|-------|--------|---------|
-| 1 | Trivial | Typo fix, comment update, dep bump |
-| 2 | Low | Small refactor, test addition, config tweak |
-| 3 | Moderate | Bug fix, minor feature, API change |
-| 5 | High | Security fix, major feature, breaking change |
-| 8 | Critical | Architecture overhaul, data migration, auth system |
+| Score | Impact   | Example                                            |
+| ----- | -------- | -------------------------------------------------- |
+| 1     | Trivial  | Typo fix, comment update, dep bump                 |
+| 2     | Low      | Small refactor, test addition, config tweak        |
+| 3     | Moderate | Bug fix, minor feature, API change                 |
+| 5     | High     | Security fix, major feature, breaking change       |
+| 8     | Critical | Architecture overhaul, data migration, auth system |
 
 ## Eval Results
 
 Eval pass rate across prompt iterations, tested against 31 synthetic fixtures:
 
-| Run | Model | Pass Rate | Changes |
-|-----|-------|-----------|---------|
-| Baseline | Haiku 4.5 | 77% (24/31) | Initial prompt |
-| Model switch | Gemini 3 Flash | 87% (27/31) | Switched to gemini-3-flash-preview |
-| Prompt v1 | Gemini 3 Flash | 90% (28/31) | Added CI, security patch, deps guidance |
-| Prompt v2 | Gemini 3 Flash | 97% (30/31) | Added data migration, infra scope, UI state guidance |
+| Run          | Model          | Pass Rate   | Changes                                              |
+| ------------ | -------------- | ----------- | ---------------------------------------------------- |
+| Baseline     | Haiku 4.5      | 77% (24/31) | Initial prompt                                       |
+| Model switch | Gemini 3 Flash | 87% (27/31) | Switched to gemini-3-flash-preview                   |
+| Prompt v1    | Gemini 3 Flash | 90% (28/31) | Added CI, security patch, deps guidance              |
+| Prompt v2    | Gemini 3 Flash | 97% (30/31) | Added data migration, infra scope, UI state guidance |
 
 Full run data (summary, per-fixture JSONL, SWOT analysis) is in `.pr-scorer/runs/`.
 
