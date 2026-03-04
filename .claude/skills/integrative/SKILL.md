@@ -21,13 +21,15 @@ Before running any command, verify environment. Run this check and report missin
 echo "ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:+set}" && echo "GOOGLE_GENERATIVE_AI_API_KEY: ${GOOGLE_GENERATIVE_AI_API_KEY:+set}" && echo "GITHUB_TOKEN: ${GITHUB_TOKEN:+set}"
 ```
 
-If any var is blank, stop and tell the user which ones to set before proceeding.
+If `GITHUB_TOKEN` is blank but `gh auth status` shows logged in, use: `GITHUB_TOKEN=$(gh auth token) pnpm dev ...`
+
+If other vars are blank, stop and tell the user which ones to set before proceeding.
 
 ## Workflow
 
 Ask the user which operation, collect inputs, execute.
 
-1. **Score** - `pnpm dev score <pr> [--model gemini-flash]` - single PR, default haiku
+1. **Score** - `pnpm dev score <pr> [--model gemini-flash] [--md]` - single PR, default haiku, JSON output (--md for markdown)
 2. **Backfill** - `pnpm dev backfill <repo> [--count N --concurrency N]` - batch, default gemini-flash
 3. **Eval** - `pnpm dev eval [--category X --score N --report]` - 31 fixtures, 12 categories
 4. **Override** - `pnpm dev override <pr> --score N --reason "..."` - record disagreement

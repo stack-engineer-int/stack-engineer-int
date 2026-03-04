@@ -110,89 +110,28 @@ function analyzeGaps(results: FixtureResult[]): GapAnalysisItem[] {
   return gaps;
 }
 
-export function formatReportMarkdown(report: RunReport): string {
-  const lines: string[] = [];
-
-  lines.push(`# Eval Run: ${report.runName}`);
-  lines.push('');
-  lines.push(`**Timestamp:** ${report.timestamp}`);
-  lines.push(`**Pass Rate:** ${report.passRate}% (${report.passed}/${report.totalTests})`);
-  lines.push(`**Avg Duration:** ${report.avgDurationMs}ms`);
-  lines.push('');
-
-  lines.push('## Results by Category');
-  lines.push('');
-  lines.push('| Category | Pass Rate | Passed | Total |');
-  lines.push('|----------|-----------|--------|-------|');
-  for (const [cat, stats] of Object.entries(report.byCategory).sort((a, b) => a[1].passRate - b[1].passRate)) {
-    lines.push(`| ${cat} | ${stats.passRate}% | ${stats.passed} | ${stats.total} |`);
-  }
-  lines.push('');
-
-  lines.push('## Results by Expected Score');
-  lines.push('');
-  lines.push('| Score | Pass Rate | Passed | Total |');
-  lines.push('|-------|-----------|--------|-------|');
-  for (const score of [1, 2, 3, 5, 8]) {
-    const stats = report.byScore[score];
-    if (stats) {
-      lines.push(`| ${score} | ${stats.passRate}% | ${stats.passed} | ${stats.total} |`);
-    }
-  }
-  lines.push('');
-
-  const failedResults = report.results.filter((r) => !r.validation.scoreMatch);
-  if (failedResults.length > 0) {
-    lines.push('## Failed Tests');
-    lines.push('');
-    lines.push('| Test ID | Expected | Actual | Delta |');
-    lines.push('|---------|----------|--------|-------|');
-    for (const r of failedResults) {
-      const delta = r.validation.scoreDelta;
-      const deltaStr = delta > 0 ? `+${delta}` : `${delta}`;
-      lines.push(`| ${r.fixture.id} | ${r.validation.expectedScore} | ${r.validation.actualScore} | ${deltaStr} |`);
-    }
-    lines.push('');
-  }
-
-  if (report.gaps.length > 0) {
-    lines.push('## Gap Analysis');
-    lines.push('');
-    for (const gap of report.gaps) {
-      lines.push(`### ${gap.pattern}`);
-      lines.push('');
-      lines.push(`**Occurrences:** ${gap.occurrences}`);
-      lines.push(`**Affected Tests:** ${gap.affectedTests.join(', ')}`);
-      lines.push(`**Suggested Fix:** ${gap.suggestedFix}`);
-      lines.push('');
-    }
-  }
-
-  lines.push('## Test Details');
-  lines.push('');
-  for (const r of report.results) {
-    const icon = r.validation.scoreMatch ? 'PASS' : 'FAIL';
-    lines.push('<details>');
-    lines.push(`<summary>${icon}: ${r.fixture.id} (expected: ${r.validation.expectedScore}, actual: ${r.validation.actualScore})</summary>`);
-    lines.push('');
-    lines.push(`**Category:** ${r.fixture.category}`);
-    lines.push(`**PR Title:** ${r.fixture.pr.title}`);
-    lines.push(`**Confidence:** ${r.score.confidence}`);
-    lines.push(`**Duration:** ${r.durationMs}ms`);
-    lines.push('');
-    lines.push('**Description:**');
-    lines.push(`> ${r.score.description}`);
-    lines.push('');
-    lines.push('**Rationale:**');
-    lines.push(`> ${r.score.rationale}`);
-    lines.push('');
-    lines.push(`**Key Changes:** ${r.score.keyChanges.join(', ')}`);
-    lines.push(`**Affected Areas:** ${r.score.affectedAreas.join(', ')}`);
-    lines.push('</details>');
-    lines.push('');
-  }
-
-  return lines.join('\n');
+export function formatReportJsonl(report: RunReport): string {
+  return report.results.map((r) => {
+    const loc = r.fixture.files.reduce(
+      (acc, f) => ({ add: acc.add + f.additions, del: acc.del + f.deletions }),
+      { add: 0, del: 0 },
+    );
+    return JSON.stringify({
+      id: r.fixture.id,
+      category: r.fixture.category,
+      pass: r.validation.scoreMatch,
+      expected: r.validation.expectedScore,
+      actual: r.validation.actualScore,
+      delta: r.validation.scoreDelta,
+      confidence: r.score.confidence,
+      durationMs: r.durationMs,
+      loc,
+      files: r.fixture.files.length,
+      rationale: r.score.rationale,
+      keyChanges: r.score.keyChanges,
+      affectedAreas: r.score.affectedAreas,
+    });
+  }).join('\n');
 }
 
 export function saveReport(report: RunReport): { runDir: string; files: string[] } {
@@ -210,8 +149,9 @@ export function saveReport(report: RunReport): { runDir: string; files: string[]
   writeFileSync(summaryPath, JSON.stringify(summaryData, null, 2));
   files.push(summaryPath);
 
-  const reportPath = join(runDir, 'report.md');
-  writeFileSync(reportPath, formatReportMarkdown(report));
+  const reportPath = join(runDir, 'results.jsonl');
+  const header = '# JSONL: one result per line, compact structured output with LOC and file count per fixture';
+  writeFileSync(reportPath, header + '\n' + formatReportJsonl(report) + '\n');
   files.push(reportPath);
 
   return { runDir, files };

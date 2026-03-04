@@ -1,6 +1,6 @@
 import type { PRContext } from '../types.js';
 
-const SCORING_PROMPT = `Analyze this pull request and score its impact using the Fibonacci scale:
+export const SCORING_PROMPT = `Analyze this pull request and score its impact using the Fibonacci scale:
 
 1 = Trivial (typo, config tweak, formatting, comments only)
 2 = Minor (simple null check, small feature, adding tests for existing code)

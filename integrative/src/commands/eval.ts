@@ -1,7 +1,11 @@
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import chalk from 'chalk';
 import { allFixtures, getFixturesByCategory, getFixturesByScore } from '../evals/fixtures/index.js';
 import { runFixtures } from '../evals/runner.js';
 import { generateReport, saveReport } from '../evals/report.js';
+import { generateAnalysis } from '../evals/analysis.js';
+import { SCORING_PROMPT } from '../scoring/prompt.js';
 import type { FixtureCategory } from '../evals/types.js';
 import type { ModelId } from '../scoring/models.js';
 
@@ -49,6 +53,11 @@ export async function evalCommand(options: {
     const runName = `run-${new Date().toISOString().slice(0, 16).replace(/[T:]/g, '-')}`;
     const report = generateReport(runName, results);
     const { runDir } = saveReport(report);
+
+    console.log(chalk.dim('Generating SWOT analysis with Sonnet...'));
+    const analysis = await generateAnalysis(report, SCORING_PROMPT);
+    writeFileSync(join(runDir, 'analysis.md'), analysis + '\n');
+
     console.log(chalk.dim(`Report saved to ${runDir}/`));
   }
 }

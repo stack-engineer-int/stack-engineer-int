@@ -2,7 +2,7 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { google } from '@ai-sdk/google';
 import type { LanguageModel } from 'ai';
 
-export type ModelId = 'haiku' | 'gemini-flash';
+export type ModelId = 'haiku' | 'gemini-flash' | 'sonnet';
 
 interface ModelConfig {
   id: ModelId;
@@ -23,9 +23,16 @@ export const MODELS: Record<ModelId, ModelConfig> = {
   'gemini-flash': {
     id: 'gemini-flash',
     name: 'Gemini Flash',
-    provider: () => google('gemini-2.0-flash'),
+    provider: () => google('gemini-3-flash-preview'),
     costPer1MTokens: 0.15,
     description: 'Cost-effective for batch operations (6x cheaper)',
+  },
+  sonnet: {
+    id: 'sonnet',
+    name: 'Claude Sonnet 4.6',
+    provider: () => anthropic('claude-sonnet-4-6'),
+    costPer1MTokens: 3.0,
+    description: 'High-quality analysis and reasoning',
   },
 };
 
