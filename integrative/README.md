@@ -59,6 +59,30 @@ pnpm dev gaps
 
 Analyzes recorded overrides using LLM gap analysis. Groups similar suggestions into patterns to identify systematic scoring weaknesses.
 
+## Calibration Loop
+
+The scoring prompt isn't static. It improves through a feedback cycle:
+
+```
+eval fixtures ──→ run evals ──→ identify gaps ──→ refine prompt ──┐
+      ↑                                                           │
+      └───────────────────────────────────────────────────────────┘
+
+real PRs ──→ score ──→ human disagrees ──→ record override ──→ gap analysis ──→ prompt update
+```
+
+**Eval loop**: Run the 31-fixture suite, find where the model diverges from expected scores, update the prompt with calibration guidance, re-run. Four iterations took pass rate from 77% to 97%.
+
+**Production loop**: Score real PRs, record disagreements with `override`, run `gaps` to cluster similar misscores into patterns, update the prompt to address systematic weaknesses. This is where codebase-specific calibration happens.
+
+The two loops reinforce each other. Eval fixtures catch regressions when the prompt changes. Overrides catch patterns the fixtures don't cover.
+
+## Structured Output
+
+All LLM scoring calls return Zod-validated objects, not free text. The schema constrains responses to a Fibonacci score, confidence level, rationale, key changes, and affected areas. Invalid output fails at parse time rather than propagating downstream.
+
+This matters for batch operations. When you score 20 PRs in parallel, you need every response to conform to the same shape. Structured output with `Output.object` (Vercel AI SDK) makes LLM calls behave like typed API endpoints.
+
 ## Scoring Scale
 
 | Score | Impact   | Example                                            |
@@ -122,9 +146,15 @@ Real results will vary. Every codebase has different conventions, PR patterns, a
 
 ## Models
 
-- **Claude Haiku 4.5** (`haiku`) - Default for single PR scoring. Fast, high quality.
-- **Gemini 3 Flash** (`gemini-flash`) - Default for batch operations and evals. Cost-effective.
-- **Claude Sonnet 4.6** (`sonnet`) - Used for SWOT analysis of eval results. High-quality reasoning.
+Different tasks have different cost/quality profiles. Single PR scoring is latency-sensitive and infrequent, so it gets the higher-quality model. Batch operations (backfill 20 PRs, run 31 eval fixtures) are throughput-sensitive and cost-multiplied, so they get the cheaper model. Analysis tasks need reasoning depth over speed.
+
+| Model | Use Case | Why |
+| --- | --- | --- |
+| **Claude Haiku 4.5** (`haiku`) | Single PR scoring | Fast, high quality per-request |
+| **Gemini 3 Flash** (`gemini-flash`) | Batch scoring, evals | 6x cheaper than Haiku at comparable accuracy |
+| **Claude Sonnet 4.6** (`sonnet`) | SWOT analysis | Deeper reasoning for eval meta-analysis |
+
+Model selection is a first-class config via `--model` flag, not hardcoded. The `ModelConfig` interface in `scoring/models.ts` makes adding models a registry entry.
 
 ## Architecture
 
@@ -158,6 +188,28 @@ src/
     overrides.ts      # Override persistence (JSON files)
     gap-analysis.ts   # LLM-powered gap analysis
 ```
+
+## Future
+
+### Shadow mode
+
+Run scoring alongside an existing PR process without changing it. Every merged PR gets scored in the background, building a dataset of impact scores against real team activity. Use the overrides and gap analysis loop to calibrate the prompt before the scores mean anything official. Shadow mode is how you answer "does this match our judgment?" before committing to integration.
+
+### CI integration
+
+Once calibrated, run as a GitHub Action (or equivalent) on PR open/update. Score appears as a PR comment or check annotation. The team sees impact scores in their normal review flow without a separate tool. Scoring becomes part of the process, not a separate step.
+
+### Retrospective baseline
+
+Backfill scoring across months or years of merged PRs to establish a historical baseline. This gives you a before/after signal when you change something: new tooling, team restructure, sprint cadence, stack migration. Without a baseline, you're measuring change against nothing.
+
+### Proactive scoring
+
+Score issues and specs before code is written. Run the scorer against a proposed change description to estimate impact before implementation starts. This flips scoring from retrospective ("how impactful was this PR") to predictive ("how impactful will this work be"). Useful for sprint planning, prioritization, and catching scope creep early: if an issue scores higher than expected, it probably needs to be broken down.
+
+### Codebase context layer
+
+Current scoring operates on the diff alone. A context layer that vectorizes the codebase (or previous PRs) would let the scorer understand what a change means in the broader system, not just what it changes. A 3-line fix to an authentication module scores differently when the scorer knows that module handles 100% of login traffic. This shifts scoring from "what changed" to "what does this change mean here," closing the gap between the model's judgment and a reviewer who knows the system.
 
 ## Testing
 
