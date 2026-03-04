@@ -82,6 +82,38 @@ Eval pass rate across prompt iterations, tested against 31 synthetic fixtures:
 
 Full run data (summary, per-fixture JSONL, SWOT analysis) is in `.pr-scorer/runs/`.
 
+```
+  100% ┬─────────────────────────────────────── ── ── ── ── ── ── ── ──
+       │                                    ●
+       │                              ●
+   90% ┤                        ●                    - - - - - - - - -
+       │                  ●
+       │
+   80% ┤            ●
+       │
+       │      ●
+   70% ┤
+       │
+       │
+   60% ┤
+       ╰──────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────
+            Initial  v0   v1    v2    v3    v4    v5    v6    v7   ...
+              prompt
+
+       ● Model pass rate          ── Human reviewer (theoretical ceiling)
+                                  -- Real-world accuracy (varies per codebase)
+```
+
+The model approaches but never lands on the human reviewer line. Each prompt iteration closes the gap on calibration fixtures, but real-world accuracy will be lower due to codebase-specific patterns the fixtures don't cover. The override-gaps loop narrows that second gap over time.
+
+### Why impact scoring, not LOC
+
+PR count, lines of code, additions, deletions: these are activity metrics, not impact metrics. A 3-line SQL injection fix has more impact than a 500-line formatting pass. Impact scoring captures the complexity and significance of a change as a human reviewer would judge it.
+
+Different people will rate the same PR differently. That's expected. The score isn't an objective truth, it's a calibrated approximation of how complex and consequential a change is. What matters is consistency within a team's calibration, not universal agreement.
+
+This makes impact scoring useful as a baseline for measuring changes to the engineering system itself. When you add AI tooling to a team, change the stack, adjust sprint cadence, or modify headcount, you need a stable measure to compare before and after. PR count and LOC are too noisy. A Fibonacci impact score, calibrated to your team's judgment, gives you a signal you can track across those changes.
+
 ### On overfitting
 
 These numbers are intentionally overfit on the eval fixtures. The goal of prompt engineering is to maximize alignment against a known set of calibration examples, similar to RLHF (reinforcement learning from human feedback) but without adjusting model weights. You push the prompt until the model's scoring roughly matches what a human reviewer would assign.
