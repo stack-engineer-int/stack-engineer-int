@@ -59,6 +59,24 @@ pnpm dev gaps
 
 Analyzes recorded overrides using LLM gap analysis. Groups similar suggestions into patterns to identify systematic scoring weaknesses.
 
+### Calibrate from review table
+
+```bash
+# 1. Score PRs and write a review table
+pnpm dev backfill owner/repo --count 20 --review
+
+# 2. Edit .pr-scorer/reviews/YYYY-MM-DD-owner-repo.md
+#    Fill in "Your Score" and "Reason" where you disagree
+
+# 3. Create overrides from your edits
+pnpm dev calibrate .pr-scorer/reviews/2026-03-04-owner-repo.md
+
+# 4. Analyze patterns
+pnpm dev gaps
+```
+
+The review table captures all scores in a single markdown file. Edit it to record disagreements, then `calibrate` reads your edits back as overrides. Faster than running `override` per PR.
+
 ## Calibration Loop
 
 The scoring prompt isn't static. It improves through a feedback cycle:
