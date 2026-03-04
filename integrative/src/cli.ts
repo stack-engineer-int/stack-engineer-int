@@ -46,6 +46,7 @@ program
 	.option("-n, --count <count>", "Number of PRs to score", "10")
 	.option("-m, --model <model>", "Model to use (haiku, gemini-flash)", "gemini-flash")
 	.option("-c, --concurrency <n>", "Concurrent scoring requests", "3")
+	.option("--review", "Write a review table for human calibration")
 	.action(backfillCommand);
 
 program
