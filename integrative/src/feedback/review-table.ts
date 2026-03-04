@@ -47,3 +47,51 @@ export function generateReviewTable(repo: string, prs: ScoredPR[]): string {
 
 	return lines.join("\n");
 }
+
+export interface ParsedOverride {
+	pr: string;
+	originalScore: number;
+	overrideScore: number;
+	reason: string;
+}
+
+export function parseReviewTable(content: string): ParsedOverride[] {
+	const overrides: ParsedOverride[] = [];
+	const lines = content.split("\n");
+
+	for (const line of lines) {
+		if (!line.startsWith("|") || line.startsWith("|---") || line.includes("AI Score")) continue;
+
+		const cells = line
+			.split("|")
+			.map((c) => c.trim())
+			.filter(Boolean);
+		if (cells.length < 5) continue;
+
+		const prCell = cells[1];
+		const aiScoreCell = cells[2];
+		const yourScoreCell = cells[3];
+		const reasonCell = cells[4];
+
+		if (!yourScoreCell) continue;
+
+		const linkMatch = prCell.match(/\[.*?\]\(https:\/\/github\.com\/([^/]+\/[^/]+)\/pull\/(\d+)\)/);
+		if (!linkMatch) continue;
+
+		const repo = linkMatch[1];
+		const number = linkMatch[2];
+		const aiScore = Number.parseInt(aiScoreCell, 10);
+		const yourScore = Number.parseInt(yourScoreCell, 10);
+
+		if (Number.isNaN(yourScore) || yourScore === aiScore) continue;
+
+		overrides.push({
+			pr: `${repo}#${number}`,
+			originalScore: aiScore,
+			overrideScore: yourScore,
+			reason: reasonCell || "No reason provided",
+		});
+	}
+
+	return overrides;
+}
