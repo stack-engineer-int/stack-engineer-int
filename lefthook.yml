@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    biome:
+      glob: "*.{ts,tsx,js,jsx,json,jsonc}"
+      run: pnpm biome check --write --staged --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+    typecheck:
+      glob: "*.{ts,tsx}"
+      run: cd integrative && pnpm tsc --noEmit

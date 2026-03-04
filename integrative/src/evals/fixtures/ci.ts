@@ -1,18 +1,18 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const ciFixtures: PRFixture[] = [
-  {
-    id: 'ci-add-workflow',
-    name: 'Add CI workflow',
-    category: 'ci',
-    expectedScore: 2,
-    pr: {
-      title: 'ci: add GitHub Actions workflow',
-      body: 'Sets up CI pipeline with lint, type-check, and tests.',
-      author: 'developer',
-    },
-    files: [{ filename: '.github/workflows/ci.yml', status: 'added', additions: 45, deletions: 0 }],
-    diff: `diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+	{
+		id: "ci-add-workflow",
+		name: "Add CI workflow",
+		category: "ci",
+		expectedScore: 2,
+		pr: {
+			title: "ci: add GitHub Actions workflow",
+			body: "Sets up CI pipeline with lint, type-check, and tests.",
+			author: "developer",
+		},
+		files: [{ filename: ".github/workflows/ci.yml", status: "added", additions: 45, deletions: 0 }],
+		diff: `diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -55,29 +55,29 @@ index 0000000..1234567
 +
 +      - name: Build
 +        run: pnpm build`,
-    expected: {
-      affectedAreas: ['ci'],
-      keyChanges: ['CI workflow', 'GitHub Actions'],
-    },
-  },
-  {
-    id: 'ci-add-deployment',
-    name: 'Add deployment workflow',
-    category: 'ci',
-    expectedScore: 3,
-    pr: {
-      title: 'ci: add Vercel preview and production deployments',
-      body: `Configures automatic deployments:
+		expected: {
+			affectedAreas: ["ci"],
+			keyChanges: ["CI workflow", "GitHub Actions"],
+		},
+	},
+	{
+		id: "ci-add-deployment",
+		name: "Add deployment workflow",
+		category: "ci",
+		expectedScore: 3,
+		pr: {
+			title: "ci: add Vercel preview and production deployments",
+			body: `Configures automatic deployments:
 - Preview on PR
 - Production on main
 - Notifications to Slack`,
-      author: 'developer',
-    },
-    files: [
-      { filename: '.github/workflows/deploy.yml', status: 'added', additions: 75, deletions: 0 },
-      { filename: 'vercel.json', status: 'added', additions: 15, deletions: 0 },
-    ],
-    diff: `diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+			author: "developer",
+		},
+		files: [
+			{ filename: ".github/workflows/deploy.yml", status: "added", additions: 75, deletions: 0 },
+			{ filename: "vercel.json", status: "added", additions: 15, deletions: 0 },
+		],
+		diff: `diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -141,9 +141,9 @@ index 0000000..1234567
 +          vercel-org-id: \${{ env.VERCEL_ORG_ID }}
 +          vercel-project-id: \${{ env.VERCEL_PROJECT_ID }}
 +          vercel-args: '--prod'`,
-    expected: {
-      affectedAreas: ['ci', 'infra'],
-      keyChanges: ['deployment', 'Vercel', 'preview environments'],
-    },
-  },
+		expected: {
+			affectedAreas: ["ci", "infra"],
+			keyChanges: ["deployment", "Vercel", "preview environments"],
+		},
+	},
 ];

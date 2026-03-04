@@ -1,25 +1,30 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const authFixtures: PRFixture[] = [
-  {
-    id: 'auth-session-refresh',
-    name: 'Implement session refresh',
-    category: 'auth',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: add automatic session refresh',
-      body: `Sessions now automatically refresh when nearing expiration.
+	{
+		id: "auth-session-refresh",
+		name: "Implement session refresh",
+		category: "auth",
+		expectedScore: 3,
+		pr: {
+			title: "feat: add automatic session refresh",
+			body: `Sessions now automatically refresh when nearing expiration.
 
 - Adds refresh token rotation
 - Background refresh before expiry
 - Handles refresh failures gracefully`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/server/auth/session.ts', status: 'modified', additions: 45, deletions: 12 },
-      { filename: 'src/hooks.server.ts', status: 'modified', additions: 18, deletions: 3 },
-    ],
-    diff: `diff --git a/src/lib/server/auth/session.ts b/src/lib/server/auth/session.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/server/auth/session.ts",
+				status: "modified",
+				additions: 45,
+				deletions: 12,
+			},
+			{ filename: "src/hooks.server.ts", status: "modified", additions: 18, deletions: 3 },
+		],
+		diff: `diff --git a/src/lib/server/auth/session.ts b/src/lib/server/auth/session.ts
 index 1234567..abcdefg 100644
 --- a/src/lib/server/auth/session.ts
 +++ b/src/lib/server/auth/session.ts
@@ -64,19 +69,19 @@ index 1234567..abcdefg 100644
    });
 
    if (!session || new Date(session.expiresAt) < new Date()) {`,
-    expected: {
-      affectedAreas: ['auth'],
-      keyChanges: ['session refresh', 'token rotation'],
-    },
-  },
-  {
-    id: 'auth-mfa',
-    name: 'Add multi-factor authentication',
-    category: 'auth',
-    expectedScore: 5,
-    pr: {
-      title: 'feat: implement TOTP-based MFA',
-      body: `## Summary
+		expected: {
+			affectedAreas: ["auth"],
+			keyChanges: ["session refresh", "token rotation"],
+		},
+	},
+	{
+		id: "auth-mfa",
+		name: "Add multi-factor authentication",
+		category: "auth",
+		expectedScore: 5,
+		pr: {
+			title: "feat: implement TOTP-based MFA",
+			body: `## Summary
 Adds optional multi-factor authentication using TOTP (RFC 6238).
 
 ## Changes
@@ -89,17 +94,27 @@ Adds optional multi-factor authentication using TOTP (RFC 6238).
 - Recovery codes are hashed before storage
 - Rate limiting on verification attempts
 - Audit logging for MFA events`,
-      author: 'security-engineer',
-    },
-    files: [
-      { filename: 'src/lib/server/auth/mfa.ts', status: 'added', additions: 120, deletions: 0 },
-      { filename: 'src/lib/server/auth/totp.ts', status: 'added', additions: 65, deletions: 0 },
-      { filename: 'src/routes/auth/mfa/setup/+page.svelte', status: 'added', additions: 85, deletions: 0 },
-      { filename: 'src/routes/auth/mfa/verify/+page.svelte', status: 'added', additions: 55, deletions: 0 },
-      { filename: 'src/lib/server/db/schema.ts', status: 'modified', additions: 25, deletions: 0 },
-      { filename: 'src/hooks.server.ts', status: 'modified', additions: 35, deletions: 8 },
-    ],
-    diff: `diff --git a/src/lib/server/auth/mfa.ts b/src/lib/server/auth/mfa.ts
+			author: "security-engineer",
+		},
+		files: [
+			{ filename: "src/lib/server/auth/mfa.ts", status: "added", additions: 120, deletions: 0 },
+			{ filename: "src/lib/server/auth/totp.ts", status: "added", additions: 65, deletions: 0 },
+			{
+				filename: "src/routes/auth/mfa/setup/+page.svelte",
+				status: "added",
+				additions: 85,
+				deletions: 0,
+			},
+			{
+				filename: "src/routes/auth/mfa/verify/+page.svelte",
+				status: "added",
+				additions: 55,
+				deletions: 0,
+			},
+			{ filename: "src/lib/server/db/schema.ts", status: "modified", additions: 25, deletions: 0 },
+			{ filename: "src/hooks.server.ts", status: "modified", additions: 35, deletions: 8 },
+		],
+		diff: `diff --git a/src/lib/server/auth/mfa.ts b/src/lib/server/auth/mfa.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -198,9 +213,9 @@ index 0000000..abcdefg
 +
 +  return (binary % 10 ** TOTP_DIGITS).toString().padStart(TOTP_DIGITS, '0');
 +}`,
-    expected: {
-      affectedAreas: ['auth', 'security'],
-      keyChanges: ['MFA', 'TOTP', 'recovery codes'],
-    },
-  },
+		expected: {
+			affectedAreas: ["auth", "security"],
+			keyChanges: ["MFA", "TOTP", "recovery codes"],
+		},
+	},
 ];

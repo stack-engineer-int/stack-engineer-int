@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { filterDiff } from './filter.js';
+import { describe, expect, it } from "vitest";
+import { filterDiff } from "./filter.js";
 
-describe('filterDiff', () => {
-  it('removes lockfile diffs', () => {
-    const diff = `diff --git a/src/app.ts b/src/app.ts
+describe("filterDiff", () => {
+	it("removes lockfile diffs", () => {
+		const diff = `diff --git a/src/app.ts b/src/app.ts
 --- a/src/app.ts
 +++ b/src/app.ts
 @@ -1,3 +1,4 @@
@@ -15,13 +15,13 @@ diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
 @@ -1,100 +1,200 @@
 +lots of lockfile content`;
 
-    const result = filterDiff(diff);
-    expect(result).toContain('src/app.ts');
-    expect(result).not.toContain('pnpm-lock.yaml');
-  });
+		const result = filterDiff(diff);
+		expect(result).toContain("src/app.ts");
+		expect(result).not.toContain("pnpm-lock.yaml");
+	});
 
-  it('removes build output diffs', () => {
-    const diff = `diff --git a/src/app.ts b/src/app.ts
+	it("removes build output diffs", () => {
+		const diff = `diff --git a/src/app.ts b/src/app.ts
 --- a/src/app.ts
 +++ b/src/app.ts
 @@ -1 +1 @@
@@ -32,21 +32,21 @@ diff --git a/dist/app.js b/dist/app.js
 @@ -1 +1 @@
 +compiled output`;
 
-    const result = filterDiff(diff);
-    expect(result).toContain('src/app.ts');
-    expect(result).not.toContain('dist/app.js');
-  });
+		const result = filterDiff(diff);
+		expect(result).toContain("src/app.ts");
+		expect(result).not.toContain("dist/app.js");
+	});
 
-  it('passes through normal diffs unchanged', () => {
-    const diff = `diff --git a/src/app.ts b/src/app.ts
+	it("passes through normal diffs unchanged", () => {
+		const diff = `diff --git a/src/app.ts b/src/app.ts
 --- a/src/app.ts
 +++ b/src/app.ts
 @@ -1 +1 @@
 -old
 +new`;
 
-    const result = filterDiff(diff);
-    expect(result).toContain('old');
-    expect(result).toContain('new');
-  });
+		const result = filterDiff(diff);
+		expect(result).toContain("old");
+		expect(result).toContain("new");
+	});
 });

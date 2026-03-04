@@ -1,25 +1,30 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const apiFixtures: PRFixture[] = [
-  {
-    id: 'api-new-endpoint',
-    name: 'Add new API endpoint',
-    category: 'api',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: add /api/analytics endpoint',
-      body: `Adds endpoint to fetch analytics data for dashboards.
+	{
+		id: "api-new-endpoint",
+		name: "Add new API endpoint",
+		category: "api",
+		expectedScore: 3,
+		pr: {
+			title: "feat: add /api/analytics endpoint",
+			body: `Adds endpoint to fetch analytics data for dashboards.
 
 - Aggregates daily/weekly/monthly metrics
 - Supports date range filtering
 - Returns cached results for performance`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/routes/api/analytics/+server.ts', status: 'added', additions: 75, deletions: 0 },
-      { filename: 'src/lib/server/analytics.ts', status: 'added', additions: 45, deletions: 0 },
-    ],
-    diff: `diff --git a/src/routes/api/analytics/+server.ts b/src/routes/api/analytics/+server.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/routes/api/analytics/+server.ts",
+				status: "added",
+				additions: 75,
+				deletions: 0,
+			},
+			{ filename: "src/lib/server/analytics.ts", status: "added", additions: 45, deletions: 0 },
+		],
+		diff: `diff --git a/src/routes/api/analytics/+server.ts b/src/routes/api/analytics/+server.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -64,19 +69,19 @@ index 0000000..1234567
 +    },
 +  });
 +};`,
-    expected: {
-      affectedAreas: ['api'],
-      keyChanges: ['analytics endpoint', 'caching'],
-    },
-  },
-  {
-    id: 'api-breaking-v2',
-    name: 'Breaking API v2 migration',
-    category: 'api',
-    expectedScore: 5,
-    pr: {
-      title: 'feat!: migrate to API v2 response format',
-      body: `## BREAKING CHANGE
+		expected: {
+			affectedAreas: ["api"],
+			keyChanges: ["analytics endpoint", "caching"],
+		},
+	},
+	{
+		id: "api-breaking-v2",
+		name: "Breaking API v2 migration",
+		category: "api",
+		expectedScore: 5,
+		pr: {
+			title: "feat!: migrate to API v2 response format",
+			body: `## BREAKING CHANGE
 New API response structure across all endpoints.
 
 ### Old format
@@ -92,16 +97,36 @@ New API response structure across all endpoints.
 ### Migration
 All clients must update to use \`data\` instead of \`result\`.
 v1 endpoints deprecated, will be removed in 30 days.`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/server/api/response.ts', status: 'modified', additions: 45, deletions: 20 },
-      { filename: 'src/routes/api/users/+server.ts', status: 'modified', additions: 8, deletions: 5 },
-      { filename: 'src/routes/api/repos/+server.ts', status: 'modified', additions: 8, deletions: 5 },
-      { filename: 'src/routes/api/changes/+server.ts', status: 'modified', additions: 12, deletions: 8 },
-      { filename: 'docs/api-migration.md', status: 'added', additions: 85, deletions: 0 },
-    ],
-    diff: `diff --git a/src/lib/server/api/response.ts b/src/lib/server/api/response.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/server/api/response.ts",
+				status: "modified",
+				additions: 45,
+				deletions: 20,
+			},
+			{
+				filename: "src/routes/api/users/+server.ts",
+				status: "modified",
+				additions: 8,
+				deletions: 5,
+			},
+			{
+				filename: "src/routes/api/repos/+server.ts",
+				status: "modified",
+				additions: 8,
+				deletions: 5,
+			},
+			{
+				filename: "src/routes/api/changes/+server.ts",
+				status: "modified",
+				additions: 12,
+				deletions: 8,
+			},
+			{ filename: "docs/api-migration.md", status: "added", additions: 85, deletions: 0 },
+		],
+		diff: `diff --git a/src/lib/server/api/response.ts b/src/lib/server/api/response.ts
 index 1234567..abcdefg 100644
 --- a/src/lib/server/api/response.ts
 +++ b/src/lib/server/api/response.ts
@@ -155,30 +180,30 @@ index 1234567..abcdefg 100644
 +    errors,
    };
  }`,
-    expected: {
-      affectedAreas: ['api'],
-      keyChanges: ['API v2', 'breaking change', 'response format'],
-    },
-  },
-  {
-    id: 'api-rate-limiting',
-    name: 'Add API rate limiting',
-    category: 'api',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: implement API rate limiting',
-      body: `Adds rate limiting to prevent abuse.
+		expected: {
+			affectedAreas: ["api"],
+			keyChanges: ["API v2", "breaking change", "response format"],
+		},
+	},
+	{
+		id: "api-rate-limiting",
+		name: "Add API rate limiting",
+		category: "api",
+		expectedScore: 3,
+		pr: {
+			title: "feat: implement API rate limiting",
+			body: `Adds rate limiting to prevent abuse.
 
 - 100 requests/minute for authenticated users
 - 20 requests/minute for anonymous
 - Redis-backed for distributed environments`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/server/ratelimit.ts', status: 'added', additions: 65, deletions: 0 },
-      { filename: 'src/hooks.server.ts', status: 'modified', additions: 25, deletions: 2 },
-    ],
-    diff: `diff --git a/src/lib/server/ratelimit.ts b/src/lib/server/ratelimit.ts
+			author: "developer",
+		},
+		files: [
+			{ filename: "src/lib/server/ratelimit.ts", status: "added", additions: 65, deletions: 0 },
+			{ filename: "src/hooks.server.ts", status: "modified", additions: 25, deletions: 2 },
+		],
+		diff: `diff --git a/src/lib/server/ratelimit.ts b/src/lib/server/ratelimit.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -216,9 +241,9 @@ index 0000000..1234567
 +
 +  return { success, remaining, reset };
 +}`,
-    expected: {
-      affectedAreas: ['api', 'security'],
-      keyChanges: ['rate limiting', 'Redis'],
-    },
-  },
+		expected: {
+			affectedAreas: ["api", "security"],
+			keyChanges: ["rate limiting", "Redis"],
+		},
+	},
 ];

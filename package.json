@@ -1,5 +1,16 @@
 {
-  "name": "stack-engineer-int",
-  "private": true,
-  "packageManager": "pnpm@9.15.4"
+	"name": "stack-engineer-int",
+	"private": true,
+	"packageManager": "pnpm@9.15.4",
+	"scripts": {
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"check": "biome check --write .",
+		"prepare": "lefthook install"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"lefthook": "^1.11.5"
+	}
 }

@@ -1,26 +1,26 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const infraFixtures: PRFixture[] = [
-  {
-    id: 'infra-docker',
-    name: 'Add Docker configuration',
-    category: 'infra',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: add Docker support for local development',
-      body: `Adds Docker configuration for consistent development environments.
+	{
+		id: "infra-docker",
+		name: "Add Docker configuration",
+		category: "infra",
+		expectedScore: 3,
+		pr: {
+			title: "feat: add Docker support for local development",
+			body: `Adds Docker configuration for consistent development environments.
 
 - Multi-stage build for production
 - Development compose with hot reload
 - PostgreSQL service included`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'Dockerfile', status: 'added', additions: 45, deletions: 0 },
-      { filename: 'docker-compose.yml', status: 'added', additions: 35, deletions: 0 },
-      { filename: '.dockerignore', status: 'added', additions: 15, deletions: 0 },
-    ],
-    diff: `diff --git a/Dockerfile b/Dockerfile
+			author: "developer",
+		},
+		files: [
+			{ filename: "Dockerfile", status: "added", additions: 45, deletions: 0 },
+			{ filename: "docker-compose.yml", status: "added", additions: 35, deletions: 0 },
+			{ filename: ".dockerignore", status: "added", additions: 15, deletions: 0 },
+		],
+		diff: `diff --git a/Dockerfile b/Dockerfile
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -88,19 +88,19 @@ index 0000000..abcdefg
 +
 +volumes:
 +  postgres_data:`,
-    expected: {
-      affectedAreas: ['infra'],
-      keyChanges: ['Docker', 'containerization', 'compose'],
-    },
-  },
-  {
-    id: 'infra-kubernetes',
-    name: 'Add Kubernetes manifests',
-    category: 'infra',
-    expectedScore: 5,
-    pr: {
-      title: 'feat: add Kubernetes deployment manifests',
-      body: `Production-ready Kubernetes configuration.
+		expected: {
+			affectedAreas: ["infra"],
+			keyChanges: ["Docker", "containerization", "compose"],
+		},
+	},
+	{
+		id: "infra-kubernetes",
+		name: "Add Kubernetes manifests",
+		category: "infra",
+		expectedScore: 5,
+		pr: {
+			title: "feat: add Kubernetes deployment manifests",
+			body: `Production-ready Kubernetes configuration.
 
 ## Included
 - Deployment with rolling updates
@@ -108,15 +108,15 @@ index 0000000..abcdefg
 - HPA for auto-scaling
 - ConfigMap and Secrets
 - Health checks configured`,
-      author: 'devops-engineer',
-    },
-    files: [
-      { filename: 'k8s/deployment.yaml', status: 'added', additions: 65, deletions: 0 },
-      { filename: 'k8s/service.yaml', status: 'added', additions: 20, deletions: 0 },
-      { filename: 'k8s/ingress.yaml', status: 'added', additions: 25, deletions: 0 },
-      { filename: 'k8s/hpa.yaml', status: 'added', additions: 18, deletions: 0 },
-    ],
-    diff: `diff --git a/k8s/deployment.yaml b/k8s/deployment.yaml
+			author: "devops-engineer",
+		},
+		files: [
+			{ filename: "k8s/deployment.yaml", status: "added", additions: 65, deletions: 0 },
+			{ filename: "k8s/service.yaml", status: "added", additions: 20, deletions: 0 },
+			{ filename: "k8s/ingress.yaml", status: "added", additions: 25, deletions: 0 },
+			{ filename: "k8s/hpa.yaml", status: "added", additions: 18, deletions: 0 },
+		],
+		diff: `diff --git a/k8s/deployment.yaml b/k8s/deployment.yaml
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -172,19 +172,19 @@ index 0000000..1234567
 +                name: app-config
 +            - secretRef:
 +                name: app-secrets`,
-    expected: {
-      affectedAreas: ['infra', 'kubernetes'],
-      keyChanges: ['Kubernetes', 'deployment', 'HPA', 'ingress'],
-    },
-  },
-  {
-    id: 'infra-terraform',
-    name: 'Add Terraform for cloud resources',
-    category: 'infra',
-    expectedScore: 5,
-    pr: {
-      title: 'feat: add Terraform configuration for AWS',
-      body: `Infrastructure as code for AWS resources.
+		expected: {
+			affectedAreas: ["infra", "kubernetes"],
+			keyChanges: ["Kubernetes", "deployment", "HPA", "ingress"],
+		},
+	},
+	{
+		id: "infra-terraform",
+		name: "Add Terraform for cloud resources",
+		category: "infra",
+		expectedScore: 5,
+		pr: {
+			title: "feat: add Terraform configuration for AWS",
+			body: `Infrastructure as code for AWS resources.
 
 ## Resources
 - VPC with public/private subnets
@@ -192,14 +192,14 @@ index 0000000..1234567
 - ElastiCache Redis
 - ALB with SSL termination
 - S3 bucket for assets`,
-      author: 'devops-engineer',
-    },
-    files: [
-      { filename: 'terraform/main.tf', status: 'added', additions: 120, deletions: 0 },
-      { filename: 'terraform/variables.tf', status: 'added', additions: 45, deletions: 0 },
-      { filename: 'terraform/outputs.tf', status: 'added', additions: 25, deletions: 0 },
-    ],
-    diff: `diff --git a/terraform/main.tf b/terraform/main.tf
+			author: "devops-engineer",
+		},
+		files: [
+			{ filename: "terraform/main.tf", status: "added", additions: 120, deletions: 0 },
+			{ filename: "terraform/variables.tf", status: "added", additions: 45, deletions: 0 },
+			{ filename: "terraform/outputs.tf", status: "added", additions: 25, deletions: 0 },
+		],
+		diff: `diff --git a/terraform/main.tf b/terraform/main.tf
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -256,9 +256,9 @@ index 0000000..1234567
 +  multi_az               = true
 +  deletion_protection    = true
 +}`,
-    expected: {
-      affectedAreas: ['infra', 'cloud'],
-      keyChanges: ['Terraform', 'AWS', 'VPC', 'RDS'],
-    },
-  },
+		expected: {
+			affectedAreas: ["infra", "cloud"],
+			keyChanges: ["Terraform", "AWS", "VPC", "RDS"],
+		},
+	},
 ];

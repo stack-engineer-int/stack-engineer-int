@@ -1,14 +1,14 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const securityFixtures: PRFixture[] = [
-  {
-    id: 'security-xss-fix',
-    name: 'Fix XSS vulnerability',
-    category: 'security',
-    expectedScore: 3,
-    pr: {
-      title: 'fix: sanitize user input to prevent XSS',
-      body: `## Security Fix
+	{
+		id: "security-xss-fix",
+		name: "Fix XSS vulnerability",
+		category: "security",
+		expectedScore: 3,
+		pr: {
+			title: "fix: sanitize user input to prevent XSS",
+			body: `## Security Fix
 User-provided HTML was rendered without sanitization, allowing XSS attacks.
 
 ## Impact
@@ -17,13 +17,18 @@ Attackers could inject malicious scripts via profile bio field.
 ## Fix
 - Added DOMPurify sanitization
 - Escape HTML in all user content displays`,
-      author: 'security-engineer',
-    },
-    files: [
-      { filename: 'src/lib/utils/sanitize.ts', status: 'added', additions: 25, deletions: 0 },
-      { filename: 'src/lib/components/UserBio.svelte', status: 'modified', additions: 8, deletions: 3 },
-    ],
-    diff: `diff --git a/src/lib/utils/sanitize.ts b/src/lib/utils/sanitize.ts
+			author: "security-engineer",
+		},
+		files: [
+			{ filename: "src/lib/utils/sanitize.ts", status: "added", additions: 25, deletions: 0 },
+			{
+				filename: "src/lib/components/UserBio.svelte",
+				status: "modified",
+				additions: 8,
+				deletions: 3,
+			},
+		],
+		diff: `diff --git a/src/lib/utils/sanitize.ts b/src/lib/utils/sanitize.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -70,19 +75,19 @@ index 1234567..abcdefg 100644
 -  {@html bio}
 +  {@html safeBio}
  </div>`,
-    expected: {
-      affectedAreas: ['security', 'frontend'],
-      keyChanges: ['XSS fix', 'sanitization'],
-    },
-  },
-  {
-    id: 'security-sql-injection',
-    name: 'Fix SQL injection vulnerability',
-    category: 'security',
-    expectedScore: 5,
-    pr: {
-      title: 'fix: prevent SQL injection in search endpoint',
-      body: `## CRITICAL SECURITY FIX
+		expected: {
+			affectedAreas: ["security", "frontend"],
+			keyChanges: ["XSS fix", "sanitization"],
+		},
+	},
+	{
+		id: "security-sql-injection",
+		name: "Fix SQL injection vulnerability",
+		category: "security",
+		expectedScore: 5,
+		pr: {
+			title: "fix: prevent SQL injection in search endpoint",
+			body: `## CRITICAL SECURITY FIX
 
 Search endpoint was vulnerable to SQL injection through the query parameter.
 
@@ -97,13 +102,23 @@ Uses parameterized queries via Drizzle ORM.
 ### Testing
 - Added SQL injection test cases
 - Verified with sqlmap`,
-      author: 'security-engineer',
-    },
-    files: [
-      { filename: 'src/routes/api/search/+server.ts', status: 'modified', additions: 15, deletions: 8 },
-      { filename: 'src/routes/api/search/+server.test.ts', status: 'added', additions: 45, deletions: 0 },
-    ],
-    diff: `diff --git a/src/routes/api/search/+server.ts b/src/routes/api/search/+server.ts
+			author: "security-engineer",
+		},
+		files: [
+			{
+				filename: "src/routes/api/search/+server.ts",
+				status: "modified",
+				additions: 15,
+				deletions: 8,
+			},
+			{
+				filename: "src/routes/api/search/+server.test.ts",
+				status: "added",
+				additions: 45,
+				deletions: 0,
+			},
+		],
+		diff: `diff --git a/src/routes/api/search/+server.ts b/src/routes/api/search/+server.ts
 index 1234567..abcdefg 100644
 --- a/src/routes/api/search/+server.ts
 +++ b/src/routes/api/search/+server.ts
@@ -137,28 +152,28 @@ index 1234567..abcdefg 100644
 
    return json({ results });
  };`,
-    expected: {
-      affectedAreas: ['security', 'api'],
-      keyChanges: ['SQL injection fix', 'parameterized queries'],
-    },
-  },
-  {
-    id: 'security-dependency-patch',
-    name: 'Patch vulnerable dependency',
-    category: 'security',
-    expectedScore: 2,
-    pr: {
-      title: 'fix: update lodash to patch prototype pollution',
-      body: `Updates lodash from 4.17.19 to 4.17.21 to fix CVE-2021-23337.
+		expected: {
+			affectedAreas: ["security", "api"],
+			keyChanges: ["SQL injection fix", "parameterized queries"],
+		},
+	},
+	{
+		id: "security-dependency-patch",
+		name: "Patch vulnerable dependency",
+		category: "security",
+		expectedScore: 2,
+		pr: {
+			title: "fix: update lodash to patch prototype pollution",
+			body: `Updates lodash from 4.17.19 to 4.17.21 to fix CVE-2021-23337.
 
 npm audit clean after this update.`,
-      author: 'dependabot[bot]',
-    },
-    files: [
-      { filename: 'package.json', status: 'modified', additions: 1, deletions: 1 },
-      { filename: 'pnpm-lock.yaml', status: 'modified', additions: 15, deletions: 15 },
-    ],
-    diff: `diff --git a/package.json b/package.json
+			author: "dependabot[bot]",
+		},
+		files: [
+			{ filename: "package.json", status: "modified", additions: 1, deletions: 1 },
+			{ filename: "pnpm-lock.yaml", status: "modified", additions: 15, deletions: 15 },
+		],
+		diff: `diff --git a/package.json b/package.json
 index 1234567..abcdefg 100644
 --- a/package.json
 +++ b/package.json
@@ -171,9 +186,9 @@ index 1234567..abcdefg 100644
      "drizzle-orm": "^0.30.0"
    }
  }`,
-    expected: {
-      affectedAreas: ['deps', 'security'],
-      keyChanges: ['security patch', 'lodash update'],
-    },
-  },
+		expected: {
+			affectedAreas: ["deps", "security"],
+			keyChanges: ["security patch", "lodash update"],
+		},
+	},
 ];

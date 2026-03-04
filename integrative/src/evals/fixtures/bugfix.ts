@@ -1,14 +1,14 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const bugfixFixtures: PRFixture[] = [
-  {
-    id: 'bugfix-null-check',
-    name: 'Fix null pointer exception',
-    category: 'bugfix',
-    expectedScore: 2,
-    pr: {
-      title: 'fix: handle null user in profile endpoint',
-      body: `Fixes #123
+	{
+		id: "bugfix-null-check",
+		name: "Fix null pointer exception",
+		category: "bugfix",
+		expectedScore: 2,
+		pr: {
+			title: "fix: handle null user in profile endpoint",
+			body: `Fixes #123
 
 Users were getting a 500 error when accessing their profile if they hadn't completed onboarding.
 
@@ -17,17 +17,17 @@ The profile endpoint assumed user.settings would always exist.
 
 ## Fix
 Added null check before accessing settings.`,
-      author: 'developer',
-    },
-    files: [
-      {
-        filename: 'src/routes/api/profile/+server.ts',
-        status: 'modified',
-        additions: 5,
-        deletions: 2,
-      },
-    ],
-    diff: `diff --git a/src/routes/api/profile/+server.ts b/src/routes/api/profile/+server.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/routes/api/profile/+server.ts",
+				status: "modified",
+				additions: 5,
+				deletions: 2,
+			},
+		],
+		diff: `diff --git a/src/routes/api/profile/+server.ts b/src/routes/api/profile/+server.ts
 index 1234567..abcdefg 100644
 --- a/src/routes/api/profile/+server.ts
 +++ b/src/routes/api/profile/+server.ts
@@ -46,34 +46,34 @@ index 1234567..abcdefg 100644
 
    return json({ user, theme });
  };`,
-    expected: {
-      affectedAreas: ['api'],
-      keyChanges: ['null check', 'error handling'],
-    },
-  },
-  {
-    id: 'bugfix-race-condition',
-    name: 'Fix race condition in state update',
-    category: 'bugfix',
-    expectedScore: 3,
-    pr: {
-      title: 'fix: race condition in cart state updates',
-      body: `## Problem
+		expected: {
+			affectedAreas: ["api"],
+			keyChanges: ["null check", "error handling"],
+		},
+	},
+	{
+		id: "bugfix-race-condition",
+		name: "Fix race condition in state update",
+		category: "bugfix",
+		expectedScore: 3,
+		pr: {
+			title: "fix: race condition in cart state updates",
+			body: `## Problem
 Multiple rapid "add to cart" clicks could result in incorrect quantities due to stale state reads.
 
 ## Solution
 Use functional state updates to ensure we always operate on the latest state.`,
-      author: 'developer',
-    },
-    files: [
-      {
-        filename: 'src/lib/stores/cart.svelte.ts',
-        status: 'modified',
-        additions: 12,
-        deletions: 8,
-      },
-    ],
-    diff: `diff --git a/src/lib/stores/cart.svelte.ts b/src/lib/stores/cart.svelte.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/stores/cart.svelte.ts",
+				status: "modified",
+				additions: 12,
+				deletions: 8,
+			},
+		],
+		diff: `diff --git a/src/lib/stores/cart.svelte.ts b/src/lib/stores/cart.svelte.ts
 index 1234567..abcdefg 100644
 --- a/src/lib/stores/cart.svelte.ts
 +++ b/src/lib/stores/cart.svelte.ts
@@ -109,30 +109,30 @@ index 1234567..abcdefg 100644
 +    }
 +  }
  }`,
-    expected: {
-      affectedAreas: ['frontend', 'stores'],
-      keyChanges: ['race condition fix', 'state batching'],
-    },
-  },
-  {
-    id: 'bugfix-memory-leak',
-    name: 'Fix memory leak in event listener',
-    category: 'bugfix',
-    expectedScore: 3,
-    pr: {
-      title: 'fix: memory leak from unremoved event listeners',
-      body: 'Event listeners were not being cleaned up on component unmount, causing memory leaks in long-running sessions.',
-      author: 'developer',
-    },
-    files: [
-      {
-        filename: 'src/lib/components/Dropdown.svelte',
-        status: 'modified',
-        additions: 8,
-        deletions: 3,
-      },
-    ],
-    diff: `diff --git a/src/lib/components/Dropdown.svelte b/src/lib/components/Dropdown.svelte
+		expected: {
+			affectedAreas: ["frontend", "stores"],
+			keyChanges: ["race condition fix", "state batching"],
+		},
+	},
+	{
+		id: "bugfix-memory-leak",
+		name: "Fix memory leak in event listener",
+		category: "bugfix",
+		expectedScore: 3,
+		pr: {
+			title: "fix: memory leak from unremoved event listeners",
+			body: "Event listeners were not being cleaned up on component unmount, causing memory leaks in long-running sessions.",
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/components/Dropdown.svelte",
+				status: "modified",
+				additions: 8,
+				deletions: 3,
+			},
+		],
+		diff: `diff --git a/src/lib/components/Dropdown.svelte b/src/lib/components/Dropdown.svelte
 index 1234567..abcdefg 100644
 --- a/src/lib/components/Dropdown.svelte
 +++ b/src/lib/components/Dropdown.svelte
@@ -161,9 +161,9 @@ index 1234567..abcdefg 100644
 -    }
 -  }
  </script>`,
-    expected: {
-      affectedAreas: ['frontend', 'components'],
-      keyChanges: ['cleanup function', 'memory leak fix'],
-    },
-  },
+		expected: {
+			affectedAreas: ["frontend", "components"],
+			keyChanges: ["cleanup function", "memory leak fix"],
+		},
+	},
 ];

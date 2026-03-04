@@ -1,20 +1,20 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const testsFixtures: PRFixture[] = [
-  {
-    id: 'tests-add-unit',
-    name: 'Add unit tests for utility',
-    category: 'tests',
-    expectedScore: 2,
-    pr: {
-      title: 'test: add unit tests for date utilities',
-      body: 'Increases test coverage for date formatting functions.',
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/utils/date.test.ts', status: 'added', additions: 55, deletions: 0 },
-    ],
-    diff: `diff --git a/src/lib/utils/date.test.ts b/src/lib/utils/date.test.ts
+	{
+		id: "tests-add-unit",
+		name: "Add unit tests for utility",
+		category: "tests",
+		expectedScore: 2,
+		pr: {
+			title: "test: add unit tests for date utilities",
+			body: "Increases test coverage for date formatting functions.",
+			author: "developer",
+		},
+		files: [
+			{ filename: "src/lib/utils/date.test.ts", status: "added", additions: 55, deletions: 0 },
+		],
+		diff: `diff --git a/src/lib/utils/date.test.ts b/src/lib/utils/date.test.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -68,29 +68,29 @@ index 0000000..1234567
 +    expect(parseDate('not-a-date')).toBeNull();
 +  });
 +});`,
-    expected: {
-      affectedAreas: ['tests'],
-      keyChanges: ['unit tests', 'test coverage'],
-    },
-  },
-  {
-    id: 'tests-fix-flaky',
-    name: 'Fix flaky integration test',
-    category: 'tests',
-    expectedScore: 2,
-    pr: {
-      title: 'fix: stabilize flaky auth flow test',
-      body: `The login test was failing intermittently due to race conditions.
+		expected: {
+			affectedAreas: ["tests"],
+			keyChanges: ["unit tests", "test coverage"],
+		},
+	},
+	{
+		id: "tests-fix-flaky",
+		name: "Fix flaky integration test",
+		category: "tests",
+		expectedScore: 2,
+		pr: {
+			title: "fix: stabilize flaky auth flow test",
+			body: `The login test was failing intermittently due to race conditions.
 
 ## Root cause
 Test wasn't waiting for redirect to complete before assertions.
 
 ## Fix
 Added explicit wait for navigation and retry logic.`,
-      author: 'developer',
-    },
-    files: [{ filename: 'tests/auth.spec.ts', status: 'modified', additions: 12, deletions: 5 }],
-    diff: `diff --git a/tests/auth.spec.ts b/tests/auth.spec.ts
+			author: "developer",
+		},
+		files: [{ filename: "tests/auth.spec.ts", status: "modified", additions: 12, deletions: 5 }],
+		diff: `diff --git a/tests/auth.spec.ts b/tests/auth.spec.ts
 index 1234567..abcdefg 100644
 --- a/tests/auth.spec.ts
 +++ b/tests/auth.spec.ts
@@ -110,9 +110,9 @@ index 1234567..abcdefg 100644
 +    await expect(welcome).toContainText('Welcome');
    });
  });`,
-    expected: {
-      affectedAreas: ['tests'],
-      keyChanges: ['flaky test fix', 'explicit waits'],
-    },
-  },
+		expected: {
+			affectedAreas: ["tests"],
+			keyChanges: ["flaky test fix", "explicit waits"],
+		},
+	},
 ];

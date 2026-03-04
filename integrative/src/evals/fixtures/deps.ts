@@ -1,26 +1,26 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const depsFixtures: PRFixture[] = [
-  {
-    id: 'deps-minor-update',
-    name: 'Minor dependency updates',
-    category: 'deps',
-    expectedScore: 1,
-    pr: {
-      title: 'chore(deps): bump minor versions',
-      body: `Updates minor versions of dependencies.
+	{
+		id: "deps-minor-update",
+		name: "Minor dependency updates",
+		category: "deps",
+		expectedScore: 1,
+		pr: {
+			title: "chore(deps): bump minor versions",
+			body: `Updates minor versions of dependencies.
 
 | Package | From | To |
 |---------|------|-----|
 | svelte | 5.0.0 | 5.1.0 |
 | drizzle-orm | 0.30.0 | 0.30.2 |`,
-      author: 'dependabot[bot]',
-    },
-    files: [
-      { filename: 'package.json', status: 'modified', additions: 2, deletions: 2 },
-      { filename: 'pnpm-lock.yaml', status: 'modified', additions: 50, deletions: 50 },
-    ],
-    diff: `diff --git a/package.json b/package.json
+			author: "dependabot[bot]",
+		},
+		files: [
+			{ filename: "package.json", status: "modified", additions: 2, deletions: 2 },
+			{ filename: "pnpm-lock.yaml", status: "modified", additions: 50, deletions: 50 },
+		],
+		diff: `diff --git a/package.json b/package.json
 index 1234567..abcdefg 100644
 --- a/package.json
 +++ b/package.json
@@ -34,19 +34,19 @@ index 1234567..abcdefg 100644
      "@sveltejs/kit": "^2.0.0"
    }
  }`,
-    expected: {
-      affectedAreas: ['deps'],
-      keyChanges: ['dependency update'],
-    },
-  },
-  {
-    id: 'deps-major-upgrade',
-    name: 'Major framework upgrade',
-    category: 'deps',
-    expectedScore: 5,
-    pr: {
-      title: 'feat: upgrade to SvelteKit 2',
-      body: `## Summary
+		expected: {
+			affectedAreas: ["deps"],
+			keyChanges: ["dependency update"],
+		},
+	},
+	{
+		id: "deps-major-upgrade",
+		name: "Major framework upgrade",
+		category: "deps",
+		expectedScore: 5,
+		pr: {
+			title: "feat: upgrade to SvelteKit 2",
+			body: `## Summary
 Upgrades from SvelteKit 1.x to 2.x
 
 ## Breaking Changes
@@ -58,15 +58,15 @@ Upgrades from SvelteKit 1.x to 2.x
 1. Updated all +page.server.ts files
 2. Changed form actions syntax
 3. Updated hooks.server.ts`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'package.json', status: 'modified', additions: 5, deletions: 5 },
-      { filename: 'pnpm-lock.yaml', status: 'modified', additions: 500, deletions: 500 },
-      { filename: 'svelte.config.js', status: 'modified', additions: 8, deletions: 5 },
-      { filename: 'src/hooks.server.ts', status: 'modified', additions: 12, deletions: 8 },
-    ],
-    diff: `diff --git a/package.json b/package.json
+			author: "developer",
+		},
+		files: [
+			{ filename: "package.json", status: "modified", additions: 5, deletions: 5 },
+			{ filename: "pnpm-lock.yaml", status: "modified", additions: 500, deletions: 500 },
+			{ filename: "svelte.config.js", status: "modified", additions: 8, deletions: 5 },
+			{ filename: "src/hooks.server.ts", status: "modified", additions: 12, deletions: 8 },
+		],
+		diff: `diff --git a/package.json b/package.json
 index 1234567..abcdefg 100644
 --- a/package.json
 +++ b/package.json
@@ -111,27 +111,27 @@ index 1234567..abcdefg 100644
 +};
 +
 +export const handle = sequence(authHandle, loggingHandle);`,
-    expected: {
-      affectedAreas: ['deps', 'framework'],
-      keyChanges: ['SvelteKit 2 upgrade', 'breaking changes', 'hooks migration'],
-    },
-  },
-  {
-    id: 'deps-new-library',
-    name: 'Add new library',
-    category: 'deps',
-    expectedScore: 2,
-    pr: {
-      title: 'feat: add zod for runtime validation',
-      body: 'Adds Zod for type-safe runtime validation of API inputs.',
-      author: 'developer',
-    },
-    files: [
-      { filename: 'package.json', status: 'modified', additions: 1, deletions: 0 },
-      { filename: 'pnpm-lock.yaml', status: 'modified', additions: 25, deletions: 0 },
-      { filename: 'src/lib/validation.ts', status: 'added', additions: 30, deletions: 0 },
-    ],
-    diff: `diff --git a/package.json b/package.json
+		expected: {
+			affectedAreas: ["deps", "framework"],
+			keyChanges: ["SvelteKit 2 upgrade", "breaking changes", "hooks migration"],
+		},
+	},
+	{
+		id: "deps-new-library",
+		name: "Add new library",
+		category: "deps",
+		expectedScore: 2,
+		pr: {
+			title: "feat: add zod for runtime validation",
+			body: "Adds Zod for type-safe runtime validation of API inputs.",
+			author: "developer",
+		},
+		files: [
+			{ filename: "package.json", status: "modified", additions: 1, deletions: 0 },
+			{ filename: "pnpm-lock.yaml", status: "modified", additions: 25, deletions: 0 },
+			{ filename: "src/lib/validation.ts", status: "added", additions: 30, deletions: 0 },
+		],
+		diff: `diff --git a/package.json b/package.json
 index 1234567..abcdefg 100644
 --- a/package.json
 +++ b/package.json
@@ -174,9 +174,9 @@ index 0000000..1234567
 +  }
 +  return { success: false, error: result.error };
 +}`,
-    expected: {
-      affectedAreas: ['deps'],
-      keyChanges: ['add Zod', 'validation schemas'],
-    },
-  },
+		expected: {
+			affectedAreas: ["deps"],
+			keyChanges: ["add Zod", "validation schemas"],
+		},
+	},
 ];

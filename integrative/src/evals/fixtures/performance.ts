@@ -1,14 +1,14 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const performanceFixtures: PRFixture[] = [
-  {
-    id: 'perf-query-optimization',
-    name: 'Optimize slow database query',
-    category: 'performance',
-    expectedScore: 3,
-    pr: {
-      title: 'perf: add index and optimize dashboard query',
-      body: `Dashboard was taking 3+ seconds to load for large orgs.
+	{
+		id: "perf-query-optimization",
+		name: "Optimize slow database query",
+		category: "performance",
+		expectedScore: 3,
+		pr: {
+			title: "perf: add index and optimize dashboard query",
+			body: `Dashboard was taking 3+ seconds to load for large orgs.
 
 ## Changes
 - Added composite index on (org_id, created_at)
@@ -18,13 +18,23 @@ export const performanceFixtures: PRFixture[] = [
 ## Before/After
 - Before: 3200ms avg
 - After: 180ms avg`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/routes/app/+page.server.ts', status: 'modified', additions: 25, deletions: 15 },
-      { filename: 'drizzle/0019_add_dashboard_index.sql', status: 'added', additions: 5, deletions: 0 },
-    ],
-    diff: `diff --git a/src/routes/app/+page.server.ts b/src/routes/app/+page.server.ts
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/routes/app/+page.server.ts",
+				status: "modified",
+				additions: 25,
+				deletions: 15,
+			},
+			{
+				filename: "drizzle/0019_add_dashboard_index.sql",
+				status: "added",
+				additions: 5,
+				deletions: 0,
+			},
+		],
+		diff: `diff --git a/src/routes/app/+page.server.ts b/src/routes/app/+page.server.ts
 index 1234567..abcdefg 100644
 --- a/src/routes/app/+page.server.ts
 +++ b/src/routes/app/+page.server.ts
@@ -74,30 +84,40 @@ index 1234567..abcdefg 100644
 +    return { recentChanges };
 +  }, { ttl: 300 });
  };`,
-    expected: {
-      affectedAreas: ['api', 'database'],
-      keyChanges: ['query optimization', 'caching', 'index'],
-    },
-  },
-  {
-    id: 'perf-bundle-splitting',
-    name: 'Implement code splitting',
-    category: 'performance',
-    expectedScore: 3,
-    pr: {
-      title: 'perf: lazy load heavy components',
-      body: `Reduces initial bundle size by 45% through code splitting.
+		expected: {
+			affectedAreas: ["api", "database"],
+			keyChanges: ["query optimization", "caching", "index"],
+		},
+	},
+	{
+		id: "perf-bundle-splitting",
+		name: "Implement code splitting",
+		category: "performance",
+		expectedScore: 3,
+		pr: {
+			title: "perf: lazy load heavy components",
+			body: `Reduces initial bundle size by 45% through code splitting.
 
 - Chart library loaded on demand
 - Admin components lazy loaded
 - Markdown editor deferred`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/components/Chart.svelte', status: 'modified', additions: 15, deletions: 8 },
-      { filename: 'src/routes/app/admin/+layout.svelte', status: 'modified', additions: 12, deletions: 5 },
-    ],
-    diff: `diff --git a/src/lib/components/Chart.svelte b/src/lib/components/Chart.svelte
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/components/Chart.svelte",
+				status: "modified",
+				additions: 15,
+				deletions: 8,
+			},
+			{
+				filename: "src/routes/app/admin/+layout.svelte",
+				status: "modified",
+				additions: 12,
+				deletions: 5,
+			},
+		],
+		diff: `diff --git a/src/lib/components/Chart.svelte b/src/lib/components/Chart.svelte
 index 1234567..abcdefg 100644
 --- a/src/lib/components/Chart.svelte
 +++ b/src/lib/components/Chart.svelte
@@ -133,9 +153,9 @@ index 1234567..abcdefg 100644
 +{:else}
 +  <div class="animate-pulse bg-muted h-64 rounded" />
 +{/if}`,
-    expected: {
-      affectedAreas: ['frontend', 'performance'],
-      keyChanges: ['lazy loading', 'code splitting'],
-    },
-  },
+		expected: {
+			affectedAreas: ["frontend", "performance"],
+			keyChanges: ["lazy loading", "code splitting"],
+		},
+	},
 ];

@@ -1,4 +1,4 @@
-import type { PRContext } from '../types.js';
+import type { PRContext } from "../types.js";
 
 export const SCORING_PROMPT = `Analyze this pull request and score its impact using the Fibonacci scale:
 
@@ -10,9 +10,12 @@ export const SCORING_PROMPT = `Analyze this pull request and score its impact us
 
 Scoring guidance:
 - SQL injection / auth bypass = 5 (Major) - data breach potential
-- New deployment infrastructure (Kubernetes manifests, Terraform, Docker Compose for prod) = 5 (Major) - defines how the system runs in production, equivalent to a new system
+- Schema migrations that move/transform existing production data (not just DDL) = 5 (Major) - irreversible, affects live records, high blast radius even if LOC is modest
+- New deployment infrastructure for production or CI (Kubernetes manifests, Terraform, Docker Compose for prod) = 5 (Major) - defines how the system runs in production, equivalent to a new system
+- Docker/containerization for local development only (no prod deployment, no CI integration) = 3 (Moderate) - improves DX but doesn't define production runtime
 - Memory leak / race condition = 3 (Moderate) - stability impact, hard to diagnose
 - XSS fix = 3 (Moderate) - client-side only, no data breach
+- A UI feature that introduces a new state store, new component, and user-facing behavior = 3 (Moderate), even if it doesn't touch backend logic. "Small feature" (score 2) means a single self-contained change with no new abstractions
 - "New integration" at score 3 means a new external service, API, or architectural pattern, not adding an npm package
 - Adding a CI/CD workflow (new capability, affects all future code) = 2 (Minor)
 - Dependency version bump that patches a security CVE = 2 (Minor) - the fix is upstream, this PR just updates a version number
@@ -61,13 +64,12 @@ Consider:
 {diff}`;
 
 export function buildScoringPrompt(context: PRContext): string {
-  const filesSection = context.filesChanged
-    .map((f) => `- ${f.filename} (${f.status}: +${f.additions}/-${f.deletions})`)
-    .join('\n');
+	const filesSection = context.filesChanged
+		.map((f) => `- ${f.filename} (${f.status}: +${f.additions}/-${f.deletions})`)
+		.join("\n");
 
-  return SCORING_PROMPT
-    .replace('{title}', context.title)
-    .replace('{body}', context.body || 'No description provided')
-    .replace('{files}', filesSection)
-    .replace('{diff}', context.diff);
+	return SCORING_PROMPT.replace("{title}", context.title)
+		.replace("{body}", context.body || "No description provided")
+		.replace("{files}", filesSection)
+		.replace("{diff}", context.diff);
 }

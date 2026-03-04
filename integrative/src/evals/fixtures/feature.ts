@@ -1,28 +1,38 @@
-import type { PRFixture } from '../types.js';
+import type { PRFixture } from "../types.js";
 
 export const featureFixtures: PRFixture[] = [
-  {
-    id: 'feature-notification-prefs',
-    name: 'Add notification preferences',
-    category: 'feature',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: add notification preferences',
-      body: `## What
+	{
+		id: "feature-notification-prefs",
+		name: "Add notification preferences",
+		category: "feature",
+		expectedScore: 3,
+		pr: {
+			title: "feat: add notification preferences",
+			body: `## What
 Adds ability for users to configure notification preferences.
 
 ## Changes
 - New NotificationPrefs component
 - API endpoint for saving preferences
 - Database migration for preferences table`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/components/NotificationPrefs.svelte', status: 'added', additions: 85, deletions: 0 },
-      { filename: 'src/routes/api/preferences/+server.ts', status: 'added', additions: 42, deletions: 0 },
-      { filename: 'src/lib/server/db/schema.ts', status: 'modified', additions: 15, deletions: 0 },
-    ],
-    diff: `diff --git a/src/lib/components/NotificationPrefs.svelte b/src/lib/components/NotificationPrefs.svelte
+			author: "developer",
+		},
+		files: [
+			{
+				filename: "src/lib/components/NotificationPrefs.svelte",
+				status: "added",
+				additions: 85,
+				deletions: 0,
+			},
+			{
+				filename: "src/routes/api/preferences/+server.ts",
+				status: "added",
+				additions: 42,
+				deletions: 0,
+			},
+			{ filename: "src/lib/server/db/schema.ts", status: "modified", additions: 15, deletions: 0 },
+		],
+		diff: `diff --git a/src/lib/components/NotificationPrefs.svelte b/src/lib/components/NotificationPrefs.svelte
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -91,29 +101,34 @@ index 0000000..abcdefg
 +
 +  return json({ success: true });
 +};`,
-    expected: {
-      affectedAreas: ['frontend', 'api', 'database'],
-      keyChanges: ['notification preferences', 'new component', 'API endpoint'],
-    },
-  },
-  {
-    id: 'feature-dark-mode',
-    name: 'Add dark mode support',
-    category: 'feature',
-    expectedScore: 3,
-    pr: {
-      title: 'feat: implement dark mode toggle',
-      body: `Implements system-aware dark mode with manual override.
+		expected: {
+			affectedAreas: ["frontend", "api", "database"],
+			keyChanges: ["notification preferences", "new component", "API endpoint"],
+		},
+	},
+	{
+		id: "feature-dark-mode",
+		name: "Add dark mode support",
+		category: "feature",
+		expectedScore: 3,
+		pr: {
+			title: "feat: implement dark mode toggle",
+			body: `Implements system-aware dark mode with manual override.
 
 Uses CSS custom properties for theming.`,
-      author: 'developer',
-    },
-    files: [
-      { filename: 'src/lib/stores/theme.svelte.ts', status: 'added', additions: 35, deletions: 0 },
-      { filename: 'src/app.css', status: 'modified', additions: 45, deletions: 10 },
-      { filename: 'src/lib/components/ThemeToggle.svelte', status: 'added', additions: 28, deletions: 0 },
-    ],
-    diff: `diff --git a/src/lib/stores/theme.svelte.ts b/src/lib/stores/theme.svelte.ts
+			author: "developer",
+		},
+		files: [
+			{ filename: "src/lib/stores/theme.svelte.ts", status: "added", additions: 35, deletions: 0 },
+			{ filename: "src/app.css", status: "modified", additions: 45, deletions: 10 },
+			{
+				filename: "src/lib/components/ThemeToggle.svelte",
+				status: "added",
+				additions: 28,
+				deletions: 0,
+			},
+		],
+		diff: `diff --git a/src/lib/stores/theme.svelte.ts b/src/lib/stores/theme.svelte.ts
 new file mode 100644
 index 0000000..1234567
 --- /dev/null
@@ -151,8 +166,8 @@ index 0000000..1234567
 +}
 +
 +export const theme = new ThemeStore();`,
-    expected: {
-      affectedAreas: ['frontend', 'stores'],
-    },
-  },
+		expected: {
+			affectedAreas: ["frontend", "stores"],
+		},
+	},
 ];
