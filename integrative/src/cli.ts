@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Command } from "commander";
 import { backfillCommand } from "./commands/backfill.js";
+import { calibrateCommand } from "./commands/calibrate.js";
 import { evalCommand } from "./commands/eval.js";
 import { gapsCommand } from "./commands/gaps.js";
 import { overrideCommand } from "./commands/override.js";
@@ -70,5 +71,11 @@ program
 	.action(overrideCommand);
 
 program.command("gaps").description("Analyze score overrides for patterns").action(gapsCommand);
+
+program
+	.command("calibrate")
+	.description("Create overrides from an edited review table")
+	.argument("<file>", "Path to review table markdown file")
+	.action(calibrateCommand);
 
 program.parse();
