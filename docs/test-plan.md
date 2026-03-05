@@ -3,7 +3,7 @@
 ## Prerequisites
 
 ```bash
-cd ~/Work/stack-engineer-int/integrative
+cd integrative
 ```
 
 Confirm env vars are set:
@@ -22,7 +22,7 @@ Expected: 6/6 passing (diff filter x3, report generation x3)
 ## 2. Score a single PR (Haiku)
 
 ```bash
-pnpm dev score stack-engineer-int/cohesion#1
+pnpm dev score owner/repo#123
 ```
 
 Expected: Fibonacci score (1/2/3/5/8), rationale, confidence value. Uses Haiku by default.
@@ -30,7 +30,7 @@ Expected: Fibonacci score (1/2/3/5/8), rationale, confidence value. Uses Haiku b
 ## 3. Score a single PR (Gemini Flash)
 
 ```bash
-pnpm dev score stack-engineer-int/cohesion#1 --model gemini-flash
+pnpm dev score owner/repo#123 --model gemini-flash
 ```
 
 Expected: Same output format, different model attribution.
@@ -38,7 +38,7 @@ Expected: Same output format, different model attribution.
 ## 4. Backfill a repo
 
 ```bash
-pnpm dev backfill stack-engineer-int/cohesion --count 3 --concurrency 2
+pnpm dev backfill owner/repo --count 3 --concurrency 2
 ```
 
 Expected: Scores 3 most recent merged PRs. Progress output, then summary table.
@@ -62,7 +62,7 @@ Expected: Only runs matching fixtures. Saves markdown report to `.pr-scorer/runs
 ## 7. Record a score override
 
 ```bash
-pnpm dev override stack-engineer-int/cohesion#1 \
+pnpm dev override owner/repo#123 \
   --score 5 \
   --reason "This PR has higher impact than scored" \
   --original-score 2 \

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-PR Scorer: LLM-powered CLI tool that impact-scores pull requests on a Fibonacci scale (1, 2, 3, 5, 8). Extracted from Cohesion as a standalone open-source tool. Lives in the `integrative/` workspace.
+PR Scorer: LLM-powered CLI tool that impact-scores pull requests on a Fibonacci scale (1, 2, 3, 5, 8). Lives in the `integrative/` workspace.
 
 ## Commands
 
