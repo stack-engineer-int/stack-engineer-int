@@ -61,21 +61,37 @@ Analyzes recorded overrides using LLM gap analysis. Groups similar suggestions i
 
 ### Calibrate from review table
 
+Score a batch of PRs, review the results, and record disagreements in one pass:
+
 ```bash
 # 1. Score PRs and write a review table
 pnpm dev backfill owner/repo --count 20 --review
+```
 
-# 2. Edit .pr-scorer/reviews/YYYY-MM-DD-owner-repo.md
-#    Fill in "Your Score" and "Reason" where you disagree
+This scores 20 recent merged PRs and writes a markdown file to `.pr-scorer/reviews/`:
+
+| #   | PR                                        | AI Score     | Your Score | Reason                 |
+| --- | ----------------------------------------- | ------------ | ---------- | ---------------------- |
+| 1   | [Fix auth bypass](https://github.com/...) | 5 (Major)    |            |                        |
+| 2   | [Update deps](https://github.com/...)     | 1 (Trivial)  | 2          | Patches a security CVE |
+| 3   | [Add search API](https://github.com/...)  | 3 (Moderate) |            |                        |
+
+The file also includes AI rationale for each score so you have context without opening every PR. Leave "Your Score" blank to accept the AI score. Fill in both columns where you disagree.
+
+```bash
+# 2. Edit the review table in your editor
+#    .pr-scorer/reviews/2026-03-05-owner-repo.md
 
 # 3. Create overrides from your edits
-pnpm dev calibrate .pr-scorer/reviews/2026-03-04-owner-repo.md
+pnpm dev calibrate .pr-scorer/reviews/2026-03-05-owner-repo.md
 
-# 4. Analyze patterns
+# 4. Analyze disagreement patterns
 pnpm dev gaps
 ```
 
-The review table captures all scores in a single markdown file. Edit it to record disagreements, then `calibrate` reads your edits back as overrides. Faster than running `override` per PR.
+`calibrate` reads the edited table, creates an override for each row where your score differs from the AI score, and skips accepted rows. `gaps` then clusters those disagreements into patterns and suggests prompt improvements.
+
+This replaces running `override` per PR. One file, one editing pass, all disagreements captured.
 
 ## Calibration Loop
 
@@ -166,11 +182,11 @@ Real results will vary. Every codebase has different conventions, PR patterns, a
 
 Different tasks have different cost/quality profiles. Single PR scoring is latency-sensitive and infrequent, so it gets the higher-quality model. Batch operations (backfill 20 PRs, run 31 eval fixtures) are throughput-sensitive and cost-multiplied, so they get the cheaper model. Analysis tasks need reasoning depth over speed.
 
-| Model | Use Case | Why |
-| --- | --- | --- |
-| **Claude Haiku 4.5** (`haiku`) | Single PR scoring | Fast, high quality per-request |
+| Model                               | Use Case             | Why                                          |
+| ----------------------------------- | -------------------- | -------------------------------------------- |
+| **Claude Haiku 4.5** (`haiku`)      | Single PR scoring    | Fast, high quality per-request               |
 | **Gemini 3 Flash** (`gemini-flash`) | Batch scoring, evals | 6x cheaper than Haiku at comparable accuracy |
-| **Claude Sonnet 4.6** (`sonnet`) | SWOT analysis | Deeper reasoning for eval meta-analysis |
+| **Claude Sonnet 4.6** (`sonnet`)    | SWOT analysis        | Deeper reasoning for eval meta-analysis      |
 
 Model selection is a first-class config via `--model` flag, not hardcoded. The `ModelConfig` interface in `scoring/models.ts` makes adding models a registry entry.
 
